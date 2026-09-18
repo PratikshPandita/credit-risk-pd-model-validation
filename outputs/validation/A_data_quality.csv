@@ -1,0 +1,9 @@
+check,result
+Rows,24000.0
+Missing values (all columns),0.0
+Exact duplicate rows,24.0
+"EDUCATION codes outside documented 1-4 (0, 5, 6)",267.0
+MARRIAGE code 0 (undocumented),42.0
+PAY_1 values of -2 or 0 (not in original data dictionary),13972.0
+Negative BILL_AMT values (credit balances/refunds),1539.0
+Overall default rate,0.2211

@@ -1,0 +1,5 @@
+check,result
+Max |PD difference|: documented coefficients vs developer predictions,2.7755575615628914e-16
+Max |PD difference|: independent re-fit vs developer predictions,1.2563782447738703e-07
+Mean |PD difference|: independent re-fit vs developer predictions,8.897059988125403e-09
+Max |coefficient difference|: re-fit vs developer,1.0524497377761843e-07

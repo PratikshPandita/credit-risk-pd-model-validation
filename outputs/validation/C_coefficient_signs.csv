@@ -1,0 +1,11 @@
+feature,coefficient,expected_sign,verdict
+PAY_1,0.3715,+,OK
+MAX_DELINQ_6M,0.0996,+,OK
+MONTHS_LATE_6M,0.5105,+,OK
+AVG_UTILISATION,0.0223,+,OK
+PAYMENT_RATIO,0.1833,-,SIGN CONFLICT
+LOG_LIMIT,-0.2044,-,OK
+AGE,0.0894,?,no prior view
+EDU_GRADUATE,-0.0196,?,no prior view
+EDU_HIGHSCHOOL,-0.0464,?,no prior view
+EDU_OTHER,-0.1731,?,no prior view

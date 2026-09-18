@@ -1,0 +1,57 @@
+{
+  "replication_max_pd_diff_refit": 1.2563782447738703e-07,
+  "replication_max_pd_diff_spec": 2.7755575615628914e-16,
+  "disc_dev": {
+    "AUC": 0.745090450473406,
+    "Gini": 0.4901809009468121,
+    "KS": 0.40293206344409305
+  },
+  "disc_hold": {
+    "AUC": 0.7430862519623797,
+    "Gini": 0.4861725039247593,
+    "KS": 0.41165348855547357
+  },
+  "auc_gap_dev_minus_hold": 0.0020041985110264005,
+  "overall_pred_pd": 0.22009701704609685,
+  "overall_actual_dr": 0.22111111111111112,
+  "brier_model": 0.14068039525923254,
+  "brier_naive": 0.17222098922902496,
+  "deciles_binomial_p_below_5pct": 4,
+  "psi_score": 0.0021214357189848106,
+  "psi_max_feature": 0.005321678667865181,
+  "bench": {
+    "Naive (everyone gets the average PD)": {
+      "AUC": 0.5,
+      "Gini": 0.0,
+      "KS": 0.0,
+      "Brier": 0.17222098922902496
+    },
+    "One variable only (latest repayment status)": {
+      "AUC": 0.6845191318575761,
+      "Gini": 0.36903826371515214,
+      "KS": 0.3653099663796874,
+      "Brier": null
+    },
+    "Developer model (logistic regression)": {
+      "AUC": 0.7430862519623797,
+      "Gini": 0.4861725039247593,
+      "KS": 0.41165348855547357,
+      "Brier": 0.14068039525923254
+    },
+    "Challenger (gradient boosting, same inputs)": {
+      "AUC": 0.7805800243191707,
+      "Gini": 0.5611600486383415,
+      "KS": 0.44300765596885994,
+      "Brier": 0.13225859307440602
+    }
+  },
+  "sensitivity": {
+    "Baseline (no shock)": 0.22009701994323047,
+    "Balances +20%": 0.21824927244752504,
+    "Payments -20%": 0.2169623005821398,
+    "Latest repayment slips one notch": 0.2959469871831274,
+    "Credit limit -20%": 0.2279864186102317,
+    "All four combined (severe)": 0.30038034351110265
+  },
+  "sensitivity_all_directions_up": false
+}

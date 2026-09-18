@@ -1,0 +1,130 @@
+
+======================================================================
+A. DATA QUALITY
+======================================================================
+                                                    check     result
+                                                     Rows 24000.0000
+                             Missing values (all columns)     0.0000
+                                     Exact duplicate rows    24.0000
+         EDUCATION codes outside documented 1-4 (0, 5, 6)   267.0000
+                           MARRIAGE code 0 (undocumented)    42.0000
+PAY_1 values of -2 or 0 (not in original data dictionary) 13972.0000
+       Negative BILL_AMT values (credit balances/refunds)  1539.0000
+                                     Overall default rate     0.2211
+
+======================================================================
+B. REPLICATION
+======================================================================
+                                                                check       result
+Max |PD difference|: documented coefficients vs developer predictions 2.775558e-16
+     Max |PD difference|: independent re-fit vs developer predictions 1.256378e-07
+    Mean |PD difference|: independent re-fit vs developer predictions 8.897060e-09
+                    Max |coefficient difference|: re-fit vs developer 1.052450e-07
+
+======================================================================
+C. CONCEPTUAL SOUNDNESS (coefficient signs and multicollinearity)
+======================================================================
+        feature  coefficient expected_sign       verdict
+          PAY_1       0.3715             +            OK
+  MAX_DELINQ_6M       0.0996             +            OK
+ MONTHS_LATE_6M       0.5105             +            OK
+AVG_UTILISATION       0.0223             +            OK
+  PAYMENT_RATIO       0.1833             - SIGN CONFLICT
+      LOG_LIMIT      -0.2044             -            OK
+            AGE       0.0894             ? no prior view
+   EDU_GRADUATE      -0.0196             ? no prior view
+ EDU_HIGHSCHOOL      -0.0464             ? no prior view
+      EDU_OTHER      -0.1731             ? no prior view
+
+        feature  VIF
+          PAY_1 2.71
+  MAX_DELINQ_6M 3.58
+ MONTHS_LATE_6M 2.44
+AVG_UTILISATION 2.15
+  PAYMENT_RATIO 2.11
+      LOG_LIMIT 1.38
+            AGE 1.10
+   EDU_GRADUATE 1.23
+ EDU_HIGHSCHOOL 1.20
+      EDU_OTHER 1.02
+
+======================================================================
+D. DISCRIMINATION (AUC, Gini, KS)
+======================================================================
+                AUC    Gini      KS
+development  0.7451  0.4902  0.4029
+holdout      0.7431  0.4862  0.4117
+AUC gap (development - hold-out): 0.0020  (a big gap would suggest overfitting)
+
+======================================================================
+E. CALIBRATION (predicted PD vs actual default rate, by decile, hold-out)
+======================================================================
+        customers  defaults  avg_predicted_pd  actual_default_rate  binomial_p_value
+decile                                                                              
+1             720        80            0.0732               0.1111            0.0002
+2             720        82            0.1039               0.1139            0.3921
+3             720        70            0.1173               0.0972            0.1046
+4             720        67            0.1279               0.0931            0.0044
+5             720        94            0.1405               0.1306            0.4856
+6             720       108            0.1578               0.1500            0.6092
+7             720       113            0.1860               0.1569            0.0443
+8             720       185            0.2634               0.2569            0.7350
+9             720       309            0.3757               0.4292            0.0034
+10            720       484            0.6553               0.6722            0.3470
+
+Overall hold-out: average predicted PD 0.2201 vs actual default rate 0.2211
+Brier score (lower = better): model 0.1407 vs naive 'everyone is average' 0.1722
+Deciles where the binomial test rejects the predicted PD at 5%: 4 of 10
+
+Diagnostic - predicted vs actual by latest repayment status (PAY_1), hold-out:
+       customers  avg_predicted_pd  actual_default_rate  gap_pred_minus_actual
+PAY_1                                                                         
+-2           675             0.084                0.121                 -0.037
+-1          1361             0.139                0.184                 -0.045
+ 0          3581             0.160                0.127                  0.033
+ 1           868             0.402                0.329                  0.072
+ 2           603             0.546                0.733                 -0.187
+ 3            77             0.728                0.727                  0.001
+ 4            19             0.812                0.474                  0.339
+ 5             6             0.875                0.667                  0.208
+ 6             4             0.902                0.750                  0.152
+ 7             2             0.956                1.000                 -0.044
+ 8             4             0.975                0.250                  0.725
+
+======================================================================
+F. STABILITY (PSI, development vs hold-out)
+======================================================================
+        variable    PSI status
+MODEL SCORE (PD) 0.0021 stable
+           PAY_1 0.0008 stable
+   MAX_DELINQ_6M 0.0008 stable
+  MONTHS_LATE_6M 0.0003 stable
+ AVG_UTILISATION 0.0053 stable
+   PAYMENT_RATIO 0.0008 stable
+       LOG_LIMIT 0.0018 stable
+             AGE 0.0017 stable
+    EDU_GRADUATE 0.0000 stable
+  EDU_HIGHSCHOOL 0.0000 stable
+       EDU_OTHER 0.0000 stable
+
+======================================================================
+G. BENCHMARKING (naive, one-variable, developer model, challenger)
+======================================================================
+                                                AUC    Gini      KS   Brier
+Naive (everyone gets the average PD)         0.5000  0.0000  0.0000  0.1722
+One variable only (latest repayment status)  0.6845  0.3690  0.3653     NaN
+Developer model (logistic regression)        0.7431  0.4862  0.4117  0.1407
+Challenger (gradient boosting, same inputs)  0.7806  0.5612  0.4430  0.1323
+
+======================================================================
+H. SENSITIVITY (what-if shocks applied to hold-out customers)
+======================================================================
+                        scenario  avg_predicted_pd  change_in_pd_points  relative_change
+             Baseline (no shock)            0.2201               0.0000           0.0000
+                   Balances +20%            0.2182              -0.0018          -0.0084
+                   Payments -20%            0.2170              -0.0031          -0.0142
+Latest repayment slips one notch            0.2959               0.0758           0.3446
+               Credit limit -20%            0.2280               0.0079           0.0358
+      All four combined (severe)            0.3004               0.0803           0.3648
+
+All validation outputs saved to outputs/validation
